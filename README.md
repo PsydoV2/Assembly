@@ -1,97 +1,124 @@
 
-# Assembly Code Repository
+# 🧠 Assembly Code Repository
 
-This repository contains Assembly language programs written in x86. Below are the instructions for assembling, linking, and running these `.asm` files on different platforms.
+Dieses Repository enthält Assembly-Programme für die x86-Architektur, hauptsächlich geschrieben mit NASM.
 
-## Prerequisites
+## 📦 Voraussetzungen
 
-### Assembler Installation
+### NASM installieren
 
-Ensure that you have a working assembler installed on your system. Here are instructions for some common assemblers:
+#### Linux (Debian/Ubuntu)
 
-- **NASM (Netwide Assembler)**  
-  NASM is a popular assembler for x86 architecture. You can install it using the following commands:
-  
-  - On Linux (Debian/Ubuntu):
-    ```bash
-    sudo apt-get update
-    sudo apt-get install nasm
-    ```
-  - On macOS (via Homebrew):
-    ```bash
-    brew install nasm
-    ```
-  - On Windows, download it from the [NASM website](https://www.nasm.us/) and follow the installation instructions.
+```bash
+sudo apt update
+sudo apt install nasm build-essential
+```
 
-- **MASM (Microsoft Macro Assembler)** (Windows only)  
-  MASM is used on Windows systems. It is included in Visual Studio or can be run from the Developer Command Prompt.
+#### macOS (via Homebrew)
 
-- **FASM (Flat Assembler)**  
-  Another assembler available for multiple platforms. Download it from [FASM](https://flatassembler.net/).
+```bash
+brew install nasm
+```
 
-## How to Assemble and Run `.asm` Files
+#### Windows
 
-### Using NASM (Linux/macOS/Windows)
+Lade NASM von der offiziellen Website: [https://www.nasm.us](https://www.nasm.us)  
+MASM (Microsoft Macro Assembler) ist in Visual Studio enthalten. Alternativ: [FASM](https://flatassembler.net/)
 
-1. **Assemble the `.asm` file:**
+---
 
-   Use `nasm` to convert the assembly file into an object file:
-   ```bash
-   nasm -f elf32 -o program.o program.asm
-   ```
-   On a 64-bit system:
-   ```bash
-   nasm -f elf64 -o program.o program.asm
-   ```
+## 🚀 Assembly-Dateien kompilieren & ausführen
 
-2. **Link the object file:**
+### Mit NASM (Linux/macOS/WSL)
 
-   Link the object file to create an executable:
-   ```bash
-   ld -m elf_i386 -o program program.o
-   ```
-   For 64-bit systems:
-   ```bash
-   ld -o program program.o
-   ```
+#### 32-bit Beispiel
 
-3. **Run the executable:**
+```bash
+nasm -f elf32 -o program.o program.asm
+ld -m elf_i386 -o program program.o
+./program
+```
 
-   Once linked, run the program:
-   ```bash
-   ./program
-   ```
+#### 64-bit Beispiel
 
-### Using MASM (Windows)
+```bash
+nasm -f elf64 -o program.o program.asm
+ld -o program program.o
+./program
+```
 
-1. **Assemble and link the `.asm` file:**
+> ✅ Tipp: Stelle sicher, dass dein Code zur Zielarchitektur passt (32-bit oder 64-bit).  
+> 💡 Für 32-bit-Programme musst du ggf. 32-bit Libraries installieren:  
+> `sudo apt install gcc-multilib`
 
-   Open the Developer Command Prompt (or Visual Studio Command Prompt) and run:
-   ```bash
-   ml /Fo program.obj /c program.asm
-   link /SUBSYSTEM:CONSOLE program.obj
-   ```
+---
 
-2. **Run the executable:**
+## ⚙️ Dynamisches Build-Skript (empfohlen)
 
-   After linking, run the executable:
-   ```bash
-   program.exe
-   ```
+Du kannst dir das wiederholte Tippen sparen, indem du dieses Skript verwendest:
 
-### Using FASM (Linux/macOS/Windows)
+### `build.sh`
 
-1. **Assemble and link the `.asm` file in one step:**
-   ```bash
-   fasm program.asm program
-   ```
+```bash
+#!/bin/bash
 
-2. **Run the executable:**
-   ```bash
-   ./program
-   ```
+if [ -z "$1" ]; then
+    echo "❌ Bitte gib den Dateinamen ohne Endung an, z. B.: ./build.sh hello"
+    exit 1
+fi
 
+FILENAME="$1"
 
-## License
+if [ ! -f "$FILENAME.asm" ]; then
+    echo "❌ Datei '$FILENAME.asm' nicht gefunden."
+    exit 1
+fi
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+# Assemblieren (32-bit)
+nasm -f elf32 "$FILENAME.asm" -o "$FILENAME.o" || exit 1
+
+# Linken
+ld -m elf_i386 "$FILENAME.o" -o "$FILENAME" || exit 1
+
+# Ausführen
+echo "🚀 Starte $FILENAME:"
+echo "----------------------"
+./"$FILENAME"
+```
+
+### Nutzung:
+
+```bash
+chmod +x build.sh
+./build.sh hello
+```
+
+---
+
+## 🪟 MASM (nur Windows)
+
+```cmd
+ml /Fo program.obj /c program.asm
+link /SUBSYSTEM:CONSOLE program.obj
+program.exe
+```
+
+---
+
+## 🐉 FASM (plattformunabhängig)
+
+```bash
+fasm program.asm program
+./program
+```
+
+---
+
+## 📄 Lizenz
+
+Dieses Projekt steht unter der MIT-Lizenz – siehe [LICENSE](LICENSE) für Details.
+```
+
+---
+
+Wenn du willst, kann ich dir auch gleich die deutsche und englische Version kombinieren – oder auf Englisch umstellen, falls du das Repo z. B. auf GitHub öffentlich machen willst.
