@@ -6,20 +6,23 @@ if [ -z "$1" ]; then
 fi
 
 FILENAME="$1"
+OUTDIR="out"
 
 if [ ! -f "$FILENAME.asm" ]; then
     echo "❌ Datei '$FILENAME.asm' nicht gefunden."
     exit 1
 fi
 
+# Ausgabeverzeichnis erstellen, falls nicht vorhanden
+mkdir -p "$OUTDIR"
+
 # Assemblieren
-nasm -f elf32 "$FILENAME.asm" -o "$FILENAME.o" || exit 1
+nasm -f elf32 "$FILENAME.asm" -o "$OUTDIR/$FILENAME.o" || exit 1
 
 # Linken
-ld -m elf_i386 "$FILENAME.o" -o "$FILENAME" || exit 1
+ld -m elf_i386 "$OUTDIR/$FILENAME.o" -o "$OUTDIR/$FILENAME" || exit 1
 
 # Ausführen
 echo "🚀 Starte $FILENAME:"
 echo "----------------------"
-./"$FILENAME"
-
+"./$OUTDIR/$FILENAME"
