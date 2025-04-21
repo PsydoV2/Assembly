@@ -2,7 +2,7 @@ section .text
 	global _start
 
 section .data
-	msg db "Hello World!"
+	msg db "Test!"
 
 _start:
 	# write
