@@ -1,24 +1,17 @@
 section .data
-    msg db 'Hello World!', 0    ; Legt den Text fest
-    len equ $ - msg             ; Berechnet die Länge der Nachricht
-    newline db 0x0A             ; Neue Zeile
+    	msg db "Hallo Welt!", 0xA
+        len equ $ - msg
 
 section .text
     global _start
 
 _start:
-    mov eax, 4      ; sys_write
-    mov ebx, 1      ; stdout (file descriptor 1)
-    mov ecx, msg    ; Adresse der Nachricht
-    mov edx, len    ; Länge der Nachricht
-    int 0x80        ; Systemaufruf (write)
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, msg
+    mov edx, len
+    int 0x80
 
-    mov eax, 4          ; sys_write
-    mov ebx, 1          ; stdout
-    mov ecx, newline    ; Neue Zeile
-    mov edx, 1          ; Länge der Nachricht
-    int 0x80            ; Systemaufruf (write)
-
-    mov eax, 1      ; sys_exit
-    xor ebx, ebx    ; Rückgabewert 0
-    int 0x80        ; Systemaufruf (exit)
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
