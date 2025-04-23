@@ -1,11 +1,15 @@
+# 🧠 x86 Assembly Learning Repository
 
-# 🧠 Assembly Code Repository
+This repository contains small, focused x86 assembly programs written in **NASM**, created as part of my learning journey.
 
-Dieses Repository enthält Assembly-Programme für die x86-Architektur, hauptsächlich geschrieben mit NASM.
+Each `.asm` file demonstrates a specific concept or instruction, such as `jump.asm` for basic jumps or `call.asm` for function-like calls. The goal is to build up a solid understanding of low-level programming through simple, hands-on examples.
 
-## 📦 Voraussetzungen
+> 💡 This is a beginner-friendly repo — feel free to clone it, run the examples, and modify them as you learn!
 
-### NASM installieren
+
+## 📦 Requirements
+
+### Install NASM
 
 #### Linux (Debian/Ubuntu)
 
@@ -22,16 +26,13 @@ brew install nasm
 
 #### Windows
 
-Lade NASM von der offiziellen Website: [https://www.nasm.us](https://www.nasm.us)  
-MASM (Microsoft Macro Assembler) ist in Visual Studio enthalten. Alternativ: [FASM](https://flatassembler.net/)
+Download NASM from the official website: [https://www.nasm.us](https://www.nasm.us)  
+You can also explore alternatives like [FASM](https://flatassembler.net) or MASM (included in Visual Studio).
 
----
 
-## 🚀 Assembly-Dateien kompilieren & ausführen
+## 🚀 Compile & Run (Manual)
 
-### Mit NASM (Linux/macOS/WSL)
-
-#### 32-bit Beispiel
+### 32-bit example
 
 ```bash
 nasm -f elf32 -o program.o program.asm
@@ -39,7 +40,7 @@ ld -m elf_i386 -o program program.o
 ./program
 ```
 
-#### 64-bit Beispiel
+### 64-bit example
 
 ```bash
 nasm -f elf64 -o program.o program.asm
@@ -47,78 +48,54 @@ ld -o program program.o
 ./program
 ```
 
-> ✅ Tipp: Stelle sicher, dass dein Code zur Zielarchitektur passt (32-bit oder 64-bit).  
-> 💡 Für 32-bit-Programme musst du ggf. 32-bit Libraries installieren:  
+> ✅ Make sure your code matches the target architecture (32-bit or 64-bit).  
+> 💡 On Linux, you might need to install 32-bit libraries:  
 > `sudo apt install gcc-multilib`
 
----
 
-## ⚙️ Dynamisches Build-Skript (empfohlen)
+## ⚙️ Build with Makefile (Recommended)
 
-Du kannst dir das wiederholte Tippen sparen, indem du dieses Skript verwendest:
+This repo includes a flexible `Makefile` to save time and reduce repetition.
 
-### `build.sh`
-
-```bash
-#!/bin/bash
-
-if [ -z "$1" ]; then
-    echo "❌ Bitte gib den Dateinamen ohne Endung an, z. B.: ./build.sh hello"
-    exit 1
-fi
-
-FILENAME="$1"
-
-if [ ! -f "$FILENAME.asm" ]; then
-    echo "❌ Datei '$FILENAME.asm' nicht gefunden."
-    exit 1
-fi
-
-# Assemblieren (32-bit)
-nasm -f elf32 "$FILENAME.asm" -o "$FILENAME.o" || exit 1
-
-# Linken
-ld -m elf_i386 "$FILENAME.o" -o "$FILENAME" || exit 1
-
-# Ausführen
-echo "🚀 Starte $FILENAME:"
-echo "----------------------"
-./"$FILENAME"
-```
-
-### Nutzung:
+### Example usage:
 
 ```bash
-chmod +x build.sh
-./build.sh hello
+make run FILENAME=jump
 ```
 
----
+This builds and runs `src/jump.asm`.
 
-## 🪟 MASM (nur Windows)
+### Project structure:
 
-```cmd
-ml /Fo program.obj /c program.asm
-link /SUBSYSTEM:CONSOLE program.obj
-program.exe
+```
+.
+├── Makefile
+├── src/
+│   ├── jump.asm
+│   ├── call.asm
+│   └── ...
+└── out/
 ```
 
----
-
-## 🐉 FASM (plattformunabhängig)
+### Clean the build output:
 
 ```bash
-fasm program.asm program
-./program
+make clean
 ```
+
+
+## 📚 Learning Topics
+
+Some of the topics covered in this repository:
+
+- `write.asm` – basic output using Linux syscalls
+- `read.asm` – reading input from the terminal
+- `jump.asm` – unconditional and conditional jumps
+- `call.asm` – function calls and return flow
+- More to come as I keep learning!
 
 ---
 
-## 📄 Lizenz
+## 📄 License
 
-Dieses Projekt steht unter der MIT-Lizenz – siehe [LICENSE](LICENSE) für Details.
-```
-
----
-
-Wenn du willst, kann ich dir auch gleich die deutsche und englische Version kombinieren – oder auf Englisch umstellen, falls du das Repo z. B. auf GitHub öffentlich machen willst.
+This project is open source under the [MIT License](LICENSE).
