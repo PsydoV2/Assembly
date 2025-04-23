@@ -1,17 +1,20 @@
+; writing to the console
+
 section .data
-    	msg db "Test tutorial!", 0xA
-        len equ $ - msg
+    msg db "Hello World!", 0x0A
+    msgLen equ $ - msg
 
 section .text
     global _start
 
 _start:
+
     mov eax, 4
     mov ebx, 1
     mov ecx, msg
-    mov edx, len
+    mov edx, msgLen
     int 0x80
 
     mov eax, 1
-    xor ebx, ebx
+    mov ebx, 0
     int 0x80
